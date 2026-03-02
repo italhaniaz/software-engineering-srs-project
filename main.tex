@@ -857,7 +857,7 @@ The following state diagram illustrates the lifecycle of course material managem
 The following class diagram represents the structure of the main classes in the system, their attributes, operations, and relationships.
 
 \begin{center}
-	\begin{tikzpicture}[every node/.style={font=\sffamily}, >=stealth, scale=0.95, transform shape]
+\begin{tikzpicture}[every node/.style={font=\sffamily}, >=stealth, scale=0.95, transform shape]
 		
 		% Classes (Top Row)
 		\umlclass[x=0, y=0, fill=yellow!10, draw=orange!70]{Teacher}{
@@ -922,14 +922,15 @@ The following class diagram represents the structure of the main classes in the 
 		}
 		
 		% Relationships
-		\umluniassoc{Teacher}{System}
-		\umluniassoc{System}{QuestionBank}
-		\umluniassoc{QuestionBank}{System}
-		\umluniassoc{System}{PaperGenerator}
-		\umluniassoc{PaperGenerator}{Database}
-		\umluniassoc{Database}{PaperGenerator}
-		\umluniassoc{PaperGenerator}{ExportModule}
-		
+	\umluniassoc{Teacher}{System}
+
+	\umlcompo{System}{QuestionBank}
+	\umlcompo{System}{PaperGenerator}
+
+	\umlassoc{PaperGenerator}{Database}
+
+	\umldep{PaperGenerator}{ExportModule}
+			
 	\end{tikzpicture}
 \end{center}
 
@@ -993,12 +994,9 @@ The following diagram represents the structure and interaction of components inv
 		}
 		
 		% Relationships
-		\umluniassoc{Teacher}{QuestionBank}
-		\umluniassoc{Question}{QuestionBank}
-		\umluniassoc{QuestionBank}{Question}
-		\umluniassoc{Database}{QuestionBank}
-		\umluniassoc{QuestionBank}{Database}
-		
+	\umluniassoc{Teacher}{QuestionBank} % Teacher manages QuestionBank
+	\umlcompo{QuestionBank}{Question}   % QuestionBank contains Questions
+	\umlassoc{QuestionBank}{Database}   % QuestionBank interacts with Database
 		
 	\end{tikzpicture}
 \end{center}
@@ -1057,12 +1055,9 @@ The following diagram illustrates the internal structure of the Export Module, a
 		}
 		
 		% Relationships
-		\umluniassoc{Teacher}{ExportModule}
-		\umluniassoc{ExportModule}{Teacher}
-		\umluniassoc{ExportModule}{Paper}
-		\umluniassoc{Paper}{ExportModule}
-		\umluniassoc{ExportModule}{Database}
-		\umluniassoc{Database}{ExportModule}
+		\umluniassoc{Teacher}{ExportModule}   % Teacher uses ExportModule
+		\umlcompo{ExportModule}{Paper}        % ExportModule generates/manages Paper
+		\umluniassoc{ExportModule}{Database}  % ExportModule interacts with Database
 		
 		
 	\end{tikzpicture}
@@ -1263,13 +1258,6 @@ Name\\
 Email\\
 Password
 };
-
-% \node[entity] (Course) at (4.5,-3) {
-% \textbf{Course}\\
-% \underline{CourseID} (PK)\\
-% CourseTitle\\
-% TeacherID (FK)
-% };
 
 \node[entity] (Material) at (9,-5) {
 \textbf{CourseMaterial}\\
